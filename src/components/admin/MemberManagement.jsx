@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { FaUserCircle, FaTrash, FaTasks } from "react-icons/fa";  // Ajout d'icônes supplémentaires
 
 const MemberManagement = () => {
   const [members, setMembers] = useState([]);
@@ -16,10 +17,8 @@ const MemberManagement = () => {
   };
 
   useEffect(() => {
-    // Appel à fetchMembers dans useEffect pour charger les membres au montage
     fetchMembers();
   }, []);
-  
 
   const handleDeleteMember = async (memberId) => {
     try {
@@ -41,63 +40,110 @@ const MemberManagement = () => {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Gestion des Membres</h2>
+    <div className="p-8 bg-white shadow-md rounded-lg">
+      <h2 className="text-3xl font-semibold mb-6 text-gray-700">Gestion des Membres</h2>
       <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-300">
+        <table className="min-w-full border border-gray-200">
           <thead>
             <tr>
-              <th className="border border-gray-300 px-4 py-2">Nom</th>
-              <th className="border border-gray-300 px-4 py-2">Prénom</th>
-              <th className="border border-gray-300 px-4 py-2">Email</th>
-              <th className="border border-gray-300 px-4 py-2">Actions</th>
+              <th className="border border-gray-200 px-4 py-3 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                Nom
+              </th>
+              <th className="border border-gray-200 px-4 py-3 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                Prénom
+              </th>
+              <th className="border border-gray-200 px-4 py-3 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                Email
+              </th>
+              <th className="border border-gray-200 px-4 py-3 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                Image
+              </th>
+              <th className="border border-gray-200 px-4 py-3 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                Groupe
+              </th>
+              <th className="border border-gray-200 px-4 py-3 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white divide-y divide-gray-200">
             {members.map((member) => (
               <tr key={member.id}>
-                <td className="border border-gray-300 px-4 py-2">{member.nom}</td>
-                <td className="border border-gray-300 px-4 py-2">{member.prenom}</td>
-                <td className="border border-gray-300 px-4 py-2">{member.email}</td>
-                <td className="border border-gray-300 px-4 py-2">
-                  <button 
-                    onClick={() => handleDeleteMember(member.id)} 
-                    className="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-md mr-2"
-                  >
-                    Supprimer
-                  </button>
-                  <button 
-                    onClick={() => handleViewTasks(member.id)} 
-                    className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded-md"
-                  >
-                    Voir Tâches
-                  </button>
+                <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                  {member.nom}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                  {member.prenom}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                  {member.email}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                  <FaUserCircle className="text-blue-800 text-2xl" />
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                  {member.groupName || 'Aucun'}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handleDeleteMember(member.id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <FaTrash className="inline-block text-lg" />
+                    </button>
+                    <button
+                      onClick={() => handleViewTasks(member.id)}
+                      className="text-blue-500 hover:text-blue-700"
+                    >
+                      <FaTasks className="inline-block text-lg" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
       {selectedMember && (
-        <div className="mt-4">
-          <h3 className="text-xl font-bold mb-2">Tâches pour le membre sélectionné</h3>
+        <div className="mt-8">
+          <h3 className="text-2xl font-semibold mb-4 text-gray-700">
+            Tâches pour le membre sélectionné
+          </h3>
           <div className="overflow-x-auto">
-            <table className="min-w-full border border-gray-300">
+            <table className="min-w-full border border-gray-200">
               <thead>
                 <tr>
-                  <th className="border border-gray-300 px-4 py-2">Nom de la Tâche</th>
-                  <th className="border border-gray-300 px-4 py-2">Description</th>
-                  <th className="border border-gray-300 px-4 py-2">Date Limite</th>
-                  <th className="border border-gray-300 px-4 py-2">Statut</th>
+                  <th className="border border-gray-200 px-4 py-3 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                    Nom de la Tâche
+                  </th>
+                  <th className="border border-gray-200 px-4 py-3 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                    Description
+                  </th>
+                  <th className="border border-gray-200 px-4 py-3 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                    Date Limite
+                  </th>
+                  <th className="border border-gray-200 px-4 py-3 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                    Statut
+                  </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-white divide-y divide-gray-200">
                 {tasks.map((task) => (
                   <tr key={task.id}>
-                    <td className="border border-gray-300 px-4 py-2">{task.name}</td>
-                    <td className="border border-gray-300 px-4 py-2">{task.description}</td>
-                    <td className="border border-gray-300 px-4 py-2">{task.due_date}</td>
-                    <td className="border border-gray-300 px-4 py-2">{task.status}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900">
+                      {task.name}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-900">
+                      {task.description}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-900">
+                      {task.due_date}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-900">
+                      {task.status}
+                    </td>
                   </tr>
                 ))}
               </tbody>

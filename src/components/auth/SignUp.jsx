@@ -12,6 +12,7 @@ const SignUp = () => {
     confirmationMotDePasse: "",
   });
   const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState(""); // State for success message
 
   const handleInput = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -20,6 +21,7 @@ const SignUp = () => {
   const validateForm = () => {
     let formIsValid = true;
     const newErrors = {};
+
     const validateName = (name) => {
       const regex = /^[a-zA-Z\s]*$/;
       return regex.test(name);
@@ -40,6 +42,7 @@ const SignUp = () => {
       formIsValid = false;
       newErrors.prenom = "Le prénom ne doit contenir que des lettres";
     }
+
     if (!values.email) {
       formIsValid = false;
       newErrors.email = "L'email est requis";
@@ -76,17 +79,17 @@ const SignUp = () => {
           "http://localhost:8080/api/signup",
           values
         );
-        console.log(response.data);
+        setSuccessMessage("Inscription réussie ! , Merci de verifier votre compte"); // Set success message
+        setErrors({}); // Clear any previous errors
       } catch (err) {
-        console.log(err.response.data);
         if (err.response) {
           const errorMessage = err.response.data.error;
           setErrors({ email: errorMessage });
+          setSuccessMessage(""); // Clear success message on error
         }
       }
     }
   };
-  
 
   return (
     <div className="flex w-full h-screen">
@@ -96,8 +99,16 @@ const SignUp = () => {
           <p className="font-medium text-md text-[#429BEE] mt-4">
             Bienvenue! Veuillez entrer vos coordonnées
           </p>
+          
+          {successMessage && ( // Display success message
+            <div className="text-green-500 text-sm font-bold mt-4">
+              {successMessage}
+            </div>
+          )}
+
           <div className="mt-6">
             <form onSubmit={handleSubmit}>
+              {/* Form fields */}
               <div className="flex mb-2">
                 <div className="flex flex-col mr-12">
                   <label className="text-md font-medium">Nom</label>

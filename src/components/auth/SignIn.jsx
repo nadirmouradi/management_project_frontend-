@@ -34,14 +34,17 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log(values)
-    
       try {
         const response = await axios.post(
           "http://localhost:8080/api/signin",
           values
         );
         console.log(response.data);
+        // Save JWT token and user data to sessionStorage
+        sessionStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("user", JSON.stringify(response.data.user));
+        // Redirect to member dashboard
+        window.location.href = "/member-dashboard";
       } catch (err) {
         console.log(err.response.data);
         if (err.response && err.response.data) {
@@ -49,7 +52,6 @@ const SignIn = () => {
           setErrors({ email: errorMessage });
         }
       }
-      
     }
   };
 
